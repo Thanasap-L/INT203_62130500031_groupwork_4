@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Groupwork 4</title>
+
+    <!-- https://google.github.io/material-design-icons/#icon-font-for-the-web -->
+    <!-- Using via Google Web Fonts -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+    <!-- https://tailwindcss.com/docs/installation -->
+    <!-- Using Tailwind via CDN -->
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet" />
+
+    <!-- https://v3.vuejs.org/guide/installation.html#release-notes -->
+    <!-- Vue CDN -->
+    <script src="https://unpkg.com/vue@next"></script>
+    <link href="./style.css" rel="stylesheet">
+</head>
+
+<body class="bg-indigo-900">
+    <div id="app" class="h-full bg-white w-4/5 mx-auto rounded">
+        <h1 class="text-4xl text-center pt-5 py-2 font-bold">Photo Gallery</h1>
+        <p class="text-center text-base pb-5 opacity-50">Followings your favourite pictrues</p>
+        <div class="w-40 ml-10 text-xl text-center divide-x divide-black py-5 bg-gray-200 rounded text-gray-500 pb-5 text-semibold">
+            <span class="px-2 font-semibold">Total: <span class="text-gray-900">{{ total }}</span></span>
+            <span class="px-2 font-semibold">Like: <span class="text-gray-900">{{ count }}</span></span>
+        </div>
+        <!-- Search bar -->
+        <button @click="showBar" v-show="searchButton" class="px-10 pt-5">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
+                class="fill-current hover:text-red-600 focus:outline-none">
+                <path
+                    d="M23.111 20.058l-4.977-4.977c.965-1.52 1.523-3.322 1.523-5.251 0-5.42-4.409-9.83-9.829-9.83-5.42 0-9.828 4.41-9.828 9.83s4.408 9.83 9.829 9.83c1.834 0 3.552-.505 5.022-1.383l5.021 5.021c2.144 2.141 5.384-1.096 3.239-3.24zm-20.064-10.228c0-3.739 3.043-6.782 6.782-6.782s6.782 3.042 6.782 6.782-3.043 6.782-6.782 6.782-6.782-3.043-6.782-6.782zm2.01-1.764c1.984-4.599 8.664-4.066 9.922.749-2.534-2.974-6.993-3.294-9.922-.749z" />
+            </svg></button>
+        <div v-show="searchBox" class="px-10 pt-5">
+            <input v-model="search"
+                class="ml-2 p-1 w-80 placeholder-gray-500 placeholder-opacity-50 focus:outline-none text-black rounded border-2 border-gray-400 border-opacity-25"
+                type="text" placeholder="Please enter text for searching photos">
+            <button @click="showBar" class="ml-2 p-1 rounded-sm focus:outline-none bg-blue-500">Cancel</button>
+        </div>
+        <div class="w-full flex justify-center mt-5 font-semibold text-4xl" v-if="notFound">
+            No Photos Found
+        </div>
+
+        <div class="py-2 flex flex-wrap justify-center overflow-hidden text-gray-700 h-full">
+            <!-- Zoom img -->
+            <div v-show="shown" class="bg-black w-screen p-5" style="height: 8vm">
+                <button @click="shownImg"><i class="material-icons">
+                    remove_circle_outline
+                </i></button>
+                <img class="h-full rounded pb-12 mx-auto" v-bind:src="zoomIn">
+            </div>
+            <!-- Img loops -->
+            <div v-for="(image,index) in filterPhoto" class="w-full lg:w-1/2 lg:pl-10 lg:py-6 lg:mt-0 px-5">
+                <img @click="zoomImg(index); shownImg()" alt="image"
+                    class="cursor-pointer object-cover object-center w-full h-64 rounded-lg lg:h-auto" v-bind:src="image.url">
+                <div class="flex flex-col items-start mx-auto mt-8 sm:flex-row sm:items-center">
+                    <h1 class="flex-grow mb-2 text-2xl font-medium tracking-tighter text-gray-900 title-font">
+                        {{image.text}}</h1>
+                    <svg v-show="image.fav" :xmlns="svg" class="mx-auto fill-current text-red-600 mr-5 " width="40"
+                        height="40" viewBox="0 0 24 24">
+                        <path d="M18 1l-6 4-6-4-6 5v7l12 10 12-10v-7z" />
+                    </svg>
+                    <!-- Like button -->
+                    <button class="flex-shrink-0 px-4 py-2 mt-10 font-semibold text-white transition duration-500 ease-in-out transform rounded-lg 
+                                sm:mt-0 bg-gradient-to-r from-blue-700 hover:from-blue-600 to-blue-600 hover:to-blue-700 hover:-translate-y-1 
+                                hover:scale-110 focus:shadow-outline focus:outline-none"
+                        @click="likeImg(index)">Like</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- my main.js -->
+    <script src="./main.js"></script>
+</body>
+
+</html>
